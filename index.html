@@ -7,12 +7,26 @@
 
 		$(function() {
 
-			$("#input").filteredPaste(); // Go with default settings
+			// Go with default settings
+			$("#input1").filteredPaste();
+
+			// Go with default settings
+			$("#input2").filteredPaste({
+				"filters" : ["default"]
+			}); 
+
+			// Go with custom filter
+			$("#input3").filteredPaste({
+				"filters" : ["default"]
+			}); 
 
 		});
 	</script>
 </head>
 <body>
-	<div contenteditable='true' id='input' style='width: 100%; height: 50%;'>paste here</div>
+	<div contenteditable='true' id='input1' style='width: 100%; height: 25%;'>paste here 1</div>
+	<div contenteditable='true' id='input2' style='width: 100%; height: 25%;'>paste here 2</div>
+	<div contenteditable='true' id='input3' style='width: 100%; height: 25%;'>paste here 3</div>
+	<div contenteditable='true' id='input4' style='width: 100%; height: 25%;'>paste here 4</div>
 </body>
 </html>

@@ -28,10 +28,11 @@ $.filteredPaste = {
 				var $elm = $(this);
 				var attributesToKeep = [];
 				$.each(options.tags, function(tagName, tag) {
-					if (tagName === "*" || $elm.tagName == tagName) {
-						attributesToKeep += tag.attributes;
+					if (tagName === "*" || $elm.prop("tagName").toLowerCase() === tagName) {
+						$.extend(attributesToKeep, tag.attributes);
 					}
 				});
+				console.log($elm.prop("tagName"), attributesToKeep);
 				$.each(attributes, function(i, item) {
 					if($.inArray(item,attributesToKeep) == -1 ) {
 						$elm.removeAttr(item);
@@ -85,8 +86,11 @@ $.fn.filteredPaste = function(elements, options) {
 			    // Get pasted content
 				var pastedContent = $pasteInto.html();
 				// Run filters
-				for(filterID in options.filters) {
-					pastedContent = $.filteredPaste.filters[options.filters[filterID]](pastedContent);
+				for(index in options.filters) {
+					var filterName = options.filters[index];
+					var filter = $.filteredPaste.filters[filterName];
+					pastedContent = filter(pastedContent);
+					console.log("ran filter " + filterName);
 				}
 				// Restore cursor and insert content
 				$elm.focus();
