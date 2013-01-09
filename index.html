@@ -1,41 +1,112 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<link type="text/css" media='all' rel="stylesheet" href='css/normalize.css'/>
-	<script src='js/jquery-1.8.1.min.js'></script>
-	<script src='js/jquery-filteredPaste.js'></script>
-	<script>
+	<head>
+		<title>FilteredPaste.js</title>
+		<link type="text/css" media='all' rel="stylesheet" href='css/normalize.css'/>
+		<style>
+			body, html { font: 14px arial, verdana; margin: 0px; padding: 0px; color: #222233; background: #cc1919; background: #fbfbfb; }
+			h1, h2, h3, h4 { color: #cc1919; }
+			a { text-decoration: none; border: none; }
+			* { 
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+		
+			.header { width: 800px; margin: 20px auto; padding: 20px; }
+			.header a { display: block-inline; padding: 10px; }
+			.container { width: 800px; margin: 20px auto; background: #fff; padding: 20px; box-shadow: 0px 0px 5px #777; }
+			
+			#contenteditables > div { width: 100%; height: 100px; background: #eee; padding: 10px; margin: 10px; overflow: auto; }
 
-		$(function() {
+		</style>
+	
+		<script src='js/jquery-1.8.1.min.js'></script>
+		<script src='js/jquery-filteredPaste.js'></script>
+		<script>
 
-			// Go with default settings
-			$("#input1").filteredPaste();
+			$(function() {
 
-			// Go with default settings
-			$("#input2").filteredPaste({
-				"filters" : ["default"]
-			}); 
+				// Go with default settings
+				$("#input1").filteredPaste();
 
-			// Go with no filters
-			$("#input3").filteredPaste({
-				"filters" : []
-			}); 
+				// Go with default settings
+				$("#input2").filteredPaste({
+					"filters" : ["default"]
+				}); 
 
-			// Go with custom filter that allows style attribute on any tag
-			$("#input4").filteredPaste({
-				"filters" : {
-					"default" : { 
-						options : { "tags" : { "*" : { "attributes" : ["src", "alt", "href", "style"] }}}
+				// Go with no filters
+				$("#input3").filteredPaste({
+					"filters" : []
+				}); 
+
+				// Go with default filter but custom options that allows style attribute on any tag
+				$("#input4").filteredPaste({
+					"filters" : {
+						"default" : { 
+							options : { "tags" : { "*" : { "attributes" : ["src", "alt", "href", "style"] }}}
+						}
 					}
-				}
-			}); 
+				}); 
 
-		});
-	</script>
-</head>
-<body>
-	<div contenteditable='true' id='input1' style='width: 100%; height: 25%;'>paste here 1</div>
-	<div contenteditable='true' id='input2' style='width: 100%; height: 25%;'>paste here 2</div>
-	<div contenteditable='true' id='input3' style='width: 100%; height: 25%;'>paste here 3</div>
-	<div contenteditable='true' id='input4' style='width: 100%; height: 25%;'>paste here 4</div>
-</body>
+				// Go with custom filter. It makes all pasted text yellow
+				$("#input5").filteredPaste({
+					"filters" : {
+						"someName" : { 
+							filter : function(content, options) {
+								return "<ins style='background: #eeee00;'>" + content + "</ins>";
+							},
+							options : { }
+						}
+					}
+				}); 
+
+				// Same as above, but define custom filter on $.filteredPaste *and* now also use default filter
+				$.filteredPaste.filters.customFilter = function(content, options) {
+					return "<ins style='background: #eeee00;'>" + content + "</ins>";
+				}
+				$("#input6").filteredPaste({
+					"filters" : ["default", "customFilter"]
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+		<div class="header">Projects <a href='http://willemmulder.github.com/Presenteer.js/'>Presenteer.js</a> <a href='http://willemmulder.github.com/BetterExamples.js/'>BetterExamples.js</a> <a href='http://willemmulder.github.com/FilteredPaste.js/'>FilteredPaste.js</a></div>
+		<div class="container">
+			<h1>FilteredPaste.js</h1>
+			<p class='source'>
+				Source code at <a href="https://github.com/willemmulder/FilteredPaste.js">https://github.com/willemmulder/FilteredPaste.js</a>
+			</p>
+			<h2>What does it do?</h2>
+			<p>
+				FilteredPaste.js is a jQuery plugin that filters any pasted input so that your application gets clean input, without any tags or attributes that you don't want.  
+Comes with a default filter that 
+			</p>
+			<ul>
+				<li>allows the alt attribute on any tag</li>
+				<li>allows the src attribute on img tags</li>
+				<li>allows the href attribute on a and link tags</li>
+			</ul>
+			<p>
+			FilteredPaste also allows for custom filters. See below examples for how that works!
+			</p>
+			<div id='contenteditables'>
+				<p>
+					This is how pasting works without FilteredPaste
+				</p>
+				<div contenteditable='true'>Paste here. This contenteditable uses *no filteredPaste*</div>
+				<p>
+					And this is how it works *with* FilteredPaste
+				</p>
+				<div contenteditable='true' id='input1'>Paste here. This contenteditable uses default settings of filteredPaste</div>
+				<div contenteditable='true' id='input2'>Paste here. This contenteditable explicitly specifies the default filter</div>
+				<div contenteditable='true' id='input3'>Paste here. This contenteditable uses filteredPaste, but with no filters.</div>
+				<div contenteditable='true' id='input4'>Paste here. This contenteditable uses the default filter but with custom options. The src, alt, href and style attribute is allowed on all tags.</div>
+				<div contenteditable='true' id='input5'>Paste here. It uses a custom filter that colors the inserted text yellow.</div>
+				<div contenteditable='true' id='input6'>Paste here. It uses the default filter, and additionally a custom filter that colors the inserted text yellow.</div>
+			</div>
+		</div>
+	</body>
 </html>
