@@ -15,9 +15,18 @@
 				"filters" : ["default"]
 			}); 
 
-			// Go with custom filter
+			// Go with no filters
 			$("#input3").filteredPaste({
-				"filters" : ["default"]
+				"filters" : []
+			}); 
+
+			// Go with custom filter that allows style attribute on any tag
+			$("#input4").filteredPaste({
+				"filters" : {
+					"default" : { 
+						options : { "tags" : { "*" : { "attributes" : ["src", "alt", "href", "style"] }}}
+					}
+				}
 			}); 
 
 		});

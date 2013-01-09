@@ -32,7 +32,7 @@ $.filteredPaste = {
 						$.extend(attributesToKeep, tag.attributes);
 					}
 				});
-				console.log($elm.prop("tagName"), attributesToKeep);
+				console.log(attributesToKeep);
 				$.each(attributes, function(i, item) {
 					if($.inArray(item,attributesToKeep) == -1 ) {
 						$elm.removeAttr(item);
@@ -48,15 +48,22 @@ $(function() {
 	$("body").append("<div contenteditable='true' class='filteredPaste_pasteIntoArea' style='position: absolute; width: 1px; height: 1px; overflow: hidden;'></div>");
 });
 
-$.fn.filteredPaste = function(elements, options) {
+$.fn.filteredPaste = function(options) {
 
 	var defaultOptions = {
-		"filters" : ["default"]
+		"filters" : {"default" : {}}
+	}
+
+	if (options && options["filters"] instanceof Array) {
+		var filters = {};
+		for(index in options["filters"]) {
+			var filterName = options["filters"][index];
+			filters[filterName] = {};
+		}
+		options.filters = filters;
 	}
 
 	options = $.extend(defaultOptions, options);
-
-	console.log(options);
 
 	$.each(this, function(index, elm) {
 		var $elm = $(elm);
@@ -86,10 +93,11 @@ $.fn.filteredPaste = function(elements, options) {
 			    // Get pasted content
 				var pastedContent = $pasteInto.html();
 				// Run filters
-				for(index in options.filters) {
-					var filterName = options.filters[index];
+				for(filterName in options.filters) {
+					var filterOptions = options.filters[filterName].options || {};
+					console.log(filterOptions);
 					var filter = $.filteredPaste.filters[filterName];
-					pastedContent = filter(pastedContent);
+					pastedContent = filter(pastedContent, filterOptions);
 					console.log("ran filter " + filterName);
 				}
 				// Restore cursor and insert content
