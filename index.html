@@ -17,7 +17,9 @@
 			.header a { display: block-inline; padding: 10px; }
 			.container { width: 800px; margin: 20px auto; background: #fff; padding: 20px; box-shadow: 0px 0px 5px #777; }
 			
-			#contenteditables > div { width: 100%; height: 100px; background: #eee; padding: 10px; margin: 10px; overflow: auto; }
+			#contenteditables > div[contenteditable] { width: 100%; height: 100px; background: #eee; padding: 10px; margin: 10px; overflow: auto; margin-bottom: 30px; }
+
+			.syntaxhighlighter.js { overflow: hidden !important; }
 
 		</style>
 	
@@ -44,7 +46,7 @@
 				$("#input4").filteredPaste({
 					"filters" : {
 						"default" : { 
-							options : { "tags" : { "*" : { "attributes" : ["src", "alt", "href", "style"] }}}
+							options : { "tags" : { "*" : { "attributes" : ["style"] }}}
 						}
 					}
 				}); 
@@ -71,6 +73,14 @@
 
 			});
 		</script>
+
+		<script type="text/javascript" src="syntaxhighlighter/scripts/shCore.js"></script>
+		<script type="text/javascript" src="syntaxhighlighter/scripts/shBrushJScript.js"></script>
+		<link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shCoreDefault.css"/>
+		<script type="text/javascript">
+			SyntaxHighlighter.defaults.toolbar = false;
+			SyntaxHighlighter.all();
+		</script>
 	</head>
 	<body>
 		<div class="header">Projects <a href='http://willemmulder.github.com/Presenteer.js/'>Presenteer.js</a> <a href='http://willemmulder.github.com/BetterExamples.js/'>BetterExamples.js</a> <a href='http://willemmulder.github.com/FilteredPaste.js/'>FilteredPaste.js</a></div>
@@ -83,6 +93,10 @@
 			<p>
 				FilteredPaste.js is a jQuery plugin that filters any pasted input so that your application gets clean input, without any tags or attributes that you don't want.  It supports native undo with control+z. IE and Opera are not supported yet.
 			</p>
+			<pre class="brush: js;" style='overflow: hidden;'>
+// Simply works like this
+$("#anytextarea").filteredPaste();
+</pre>
 			<p>
 Comes with a default filter that 
 			</p>
@@ -105,11 +119,59 @@ Comes with a default filter that
 				<p>
 					And this is how it works *with* FilteredPaste
 				</p>
+				<pre class="brush: js;" style='overflow: hidden;'>
+// Go with default settings
+$("#input1").filteredPaste();
+</pre>
 				<div contenteditable='true' id='input1'>Paste here. This contenteditable uses default settings of filteredPaste</div>
+				<pre class="brush: js;" style='overflow: hidden;'>
+// Explicitly use default filter
+$("#input2").filteredPaste({
+	"filters" : ["default"]
+});
+</pre>
 				<div contenteditable='true' id='input2'>Paste here. This contenteditable explicitly specifies the default filter</div>
+				<pre class="brush: js;" style='overflow: hidden;'>
+// Use no filters
+$("#input3").filteredPaste({
+	"filters" : []
+});
+</pre>
 				<div contenteditable='true' id='input3'>Paste here. This contenteditable uses filteredPaste, but with no filters.</div>
-				<div contenteditable='true' id='input4'>Paste here. This contenteditable uses the default filter but with custom options. The src, alt, href and style attribute is allowed on all tags.</div>
+				<pre class="brush: js;" style='overflow: hidden;'>
+// Use default filter but set custom options that allows only style attribute on any tag
+$("#input4").filteredPaste({
+	"filters" : {
+		"default" : { 
+			options : { "tags" : { "*" : { "attributes" : ["style"] }}}
+		}
+	}
+}); 
+</pre>
+				<div contenteditable='true' id='input4'>Paste here. This contenteditable uses the default filter but with custom options. The style attribute is allowed on all tags.</div>
+				<pre class="brush: js;" style='overflow: hidden;'>
+// Go with custom filter. It makes all pasted text yellow
+$("#input5").filteredPaste({
+	"filters" : {
+		"someName" : { 
+			filter : function(content, options) {
+				return "<ins style='background: #eeee00;'>" + content + "</ins>";
+			},
+			options : { }
+		}
+	}
+}); 
+</pre>
 				<div contenteditable='true' id='input5'>Paste here. It uses a custom filter that colors the inserted text yellow.</div>
+				<pre class="brush: js;" style='overflow: hidden;'>
+// Same as above, but define custom filter on $.filteredPaste *and* now also use default filter
+$.filteredPaste.filters.customFilter = function(content, options) {
+	return "<ins style='background: #eeee00;'>" + content + "</ins>";
+}
+$("#input6").filteredPaste({
+	"filters" : ["default", "customFilter"]
+});
+</pre>			
 				<div contenteditable='true' id='input6'>Paste here. It uses the default filter, and additionally a custom filter that colors the inserted text yellow.</div>
 			</div>
 		</div>
