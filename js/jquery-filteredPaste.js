@@ -44,7 +44,7 @@ $.filteredPaste = {
 };
 
 $(function() {
-	$("body").append("<div contenteditable='true' class='filteredPaste_pasteIntoArea' style='position: fixed; left: 10px; top: 10px; width: 1px; height: 1px; overflow: hidden;'>hi there</div>");
+	$("body").append("<div contenteditable='true' class='filteredPaste_pasteIntoArea' style='position: fixed; left: 50px; top: 50px; width: 1px; height: 1px; overflow: hidden;'>hi there</div>");
 });
 
 $.fn.filteredPaste = function(options) {
