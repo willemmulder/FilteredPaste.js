@@ -9,17 +9,12 @@ License
 Licensed under the Creative Commons BY-SA 3.0  
 http://creativecommons.org/licenses/by-sa/3.0/nl/
 
-Version
+Includes
 -----------------
-* Todo
-  * IE support  
-  * Opera support  
-
-* Trunk  
-  + ...  
-
-* 1.0  
   + jQuery plugin  
   + Filters your input, removes craptags  
   + comes with native undo support  
-  + Works in Chrome and Firefox
+
+Demo
+-----------------
+https://willemmulder.github.io/FilteredPaste.js/
